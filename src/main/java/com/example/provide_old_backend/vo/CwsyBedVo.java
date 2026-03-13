@@ -1,7 +1,6 @@
 package com.example.provide_old_backend.vo;
 
 import com.example.provide_old_backend.entity.Bed;
-import com.example.provide_old_backend.entity.Room;
 import lombok.Data;
 
 import java.util.List;

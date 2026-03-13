@@ -27,6 +27,7 @@ dependencyManagement {
 dependencies {
     implementation("com.baomidou:mybatis-plus-spring-boot3-starter")
     implementation("com.baomidou:mybatis-plus-jsqlparser")
+    implementation 'me.paulschwarz:springboot3-dotenv:5.1.0'
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
     implementation 'com.mysql:mysql-connector-j:9.3.0'
     compileOnly 'org.projectlombok:lombok'
