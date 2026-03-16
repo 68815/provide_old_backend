@@ -5,9 +5,13 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.provide_old_backend.entity.Bed;
 import com.example.provide_old_backend.entity.Customer;
+import com.example.provide_old_backend.entity.NurseLevel;
+import com.example.provide_old_backend.entity.User;
 import com.example.provide_old_backend.mapper.CustomerMapper;
 import com.example.provide_old_backend.service.BedService;
 import com.example.provide_old_backend.service.CustomerService;
+import com.example.provide_old_backend.service.NurseLevelService;
+import com.example.provide_old_backend.service.UserService;
 import com.example.provide_old_backend.vo.KhxxCustomerVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,11 +25,16 @@ public class CustomerServiceImpl extends ServiceImpl<CustomerMapper, Customer> i
     @Autowired
     private BedService bedService;
 
+    @Autowired
+    private NurseLevelService nurseLevelService;
+
+    @Autowired
+    private UserService userService;
+
     @Override
     public Page<KhxxCustomerVo> listKhxxPage(String customerName, Integer manType, Integer userId, Integer pageSize) {
         Page<Customer> page = new Page<>(pageSize, 10);
         LambdaQueryWrapper<Customer> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(Customer::getIsDeleted, 0);
         if (customerName != null && !customerName.isEmpty()) {
             wrapper.like(Customer::getCustomerName, customerName);
         }
@@ -67,6 +76,18 @@ public class CustomerServiceImpl extends ServiceImpl<CustomerMapper, Customer> i
                 Bed bed = bedService.getById(customer.getBedId());
                 if (bed != null) {
                     vo.setBedNo(bed.getBedNo());
+                }
+            }
+            if (customer.getLevelId() != null) {
+                NurseLevel level = nurseLevelService.getById(customer.getLevelId());
+                if (level != null) {
+                    vo.setLevelName(level.getLevelName());
+                }
+            }
+            if (customer.getUserId() != null) {
+                User user = userService.getById(customer.getUserId());
+                if (user != null) {
+                    vo.setNickName(user.getNickname());
                 }
             }
             return vo;

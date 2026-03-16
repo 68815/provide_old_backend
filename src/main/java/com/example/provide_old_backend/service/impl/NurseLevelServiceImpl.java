@@ -1,6 +1,7 @@
 package com.example.provide_old_backend.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.provide_old_backend.entity.NurseContent;
 import com.example.provide_old_backend.entity.NurseLevel;
@@ -38,11 +39,10 @@ public class NurseLevelServiceImpl extends ServiceImpl<NurseLevelMapper, NurseLe
 
     @Override
     public void removeNurseLevel(Integer id) {
-        NurseLevel nurseLevel = getById(id);
-        if (nurseLevel != null) {
-            nurseLevel.setIsDeleted(1);
-            updateById(nurseLevel);
-        }
+        LambdaUpdateWrapper<NurseLevel> wrapper = new LambdaUpdateWrapper<>();
+        wrapper.eq(NurseLevel::getId, id)
+               .set(NurseLevel::getIsDeleted, 1);
+        update(wrapper);
     }
 
     @Override

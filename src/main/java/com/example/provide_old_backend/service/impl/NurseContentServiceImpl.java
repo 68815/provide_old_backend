@@ -7,6 +7,7 @@ import com.example.provide_old_backend.entity.NurseContent;
 import com.example.provide_old_backend.mapper.NurseContentMapper;
 import com.example.provide_old_backend.service.NurseContentService;
 import org.springframework.stereotype.Service;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 
 @Service
 public class NurseContentServiceImpl extends ServiceImpl<NurseContentMapper, NurseContent> implements NurseContentService {
@@ -27,10 +28,9 @@ public class NurseContentServiceImpl extends ServiceImpl<NurseContentMapper, Nur
 
     @Override
     public void delNurseItem(Integer id) {
-        NurseContent nurseContent = getById(id);
-        if (nurseContent != null) {
-            nurseContent.setIsDeleted(1);
-            updateById(nurseContent);
-        }
+        LambdaUpdateWrapper<NurseContent> wrapper = new LambdaUpdateWrapper<>();
+        wrapper.eq(NurseContent::getId, id)
+               .set(NurseContent::getIsDeleted, 1);
+        update(wrapper);
     }
 }
