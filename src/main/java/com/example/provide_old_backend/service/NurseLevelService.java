@@ -7,7 +7,7 @@ import com.example.provide_old_backend.entity.NurseLevel;
 import java.util.List;
 
 public interface NurseLevelService extends IService<NurseLevel> {
-    List<NurseLevel> listNotDeleted();
+    List<NurseLevel> listNurseLevel(NurseLevel nurseLevel);
     void removeNurseLevel(Integer id);
     void removeNurseLevelItem(Integer levelId, Integer itemId);
     List<NurseContent> listNurseItemByLevel(Integer levelId);

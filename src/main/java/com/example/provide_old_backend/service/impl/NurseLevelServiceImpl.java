@@ -25,9 +25,14 @@ public class NurseLevelServiceImpl extends ServiceImpl<NurseLevelMapper, NurseLe
     private NurseContentService nurseContentService;
 
     @Override
-    public List<NurseLevel> listNotDeleted() {
+    public List<NurseLevel> listNurseLevel(NurseLevel nurseLevel) {
         LambdaQueryWrapper<NurseLevel> wrapper = new LambdaQueryWrapper<>();
-        wrapper.and(w -> w.eq(NurseLevel::getIsDeleted, 0).or().isNull(NurseLevel::getIsDeleted));
+        if(null != nurseLevel.getLevelName()) {
+            wrapper.eq(NurseLevel::getLevelName, nurseLevel.getLevelName());
+        }
+        if(null != nurseLevel.getLevelStatus()) {
+            wrapper.eq(NurseLevel::getLevelStatus, nurseLevel.getLevelStatus());
+        }
         return list(wrapper);
     }
 
@@ -58,8 +63,7 @@ public class NurseLevelServiceImpl extends ServiceImpl<NurseLevelMapper, NurseLe
             return List.of();
         }
         LambdaQueryWrapper<NurseContent> contentWrapper = new LambdaQueryWrapper<>();
-        contentWrapper.in(NurseContent::getId, itemIds)
-                      .and(w -> w.eq(NurseContent::getIsDeleted, 0).or().isNull(NurseContent::getIsDeleted));
+        contentWrapper.in(NurseContent::getId, itemIds);
         return nurseContentService.list(contentWrapper);
     }
 }

@@ -23,7 +23,7 @@ public class NurseLevelController {
 
     @GetMapping("/listNurseLevel")
     public ResultVo<List<NurseLevel>> listNurseLevel(NurseLevel nurseLevel) {
-        return ResultVo.success(nurseLevelService.listNotDeleted());
+        return ResultVo.success(nurseLevelService.listNurseLevel(nurseLevel));
     }
 
     @PostMapping("/addNurseLevel")
