@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -23,6 +24,7 @@ public class Backdown implements Serializable {
     private Integer isDeleted;
 
     @TableField("customer_id")
+    @JsonProperty("customer_id")
     private Integer customerId;
 
     @TableField("retreattime")

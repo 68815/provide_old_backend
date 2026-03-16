@@ -21,6 +21,7 @@ public class BackdownServiceImpl extends ServiceImpl<BackdownMapper, Backdown> i
 
     @Override
     public void addBackdown(Backdown backdown) {
+        backdown.setId(backdown.getId());
         backdown.setIsDeleted(0);
         backdown.setAuditstatus(0);
         save(backdown);
