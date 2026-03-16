@@ -1,6 +1,5 @@
 package com.example.provide_old_backend.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.provide_old_backend.entity.Bed;
@@ -13,6 +12,7 @@ import com.example.provide_old_backend.service.CustomerService;
 import com.example.provide_old_backend.vo.BedDetailsVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import java.time.LocalDate;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -29,11 +29,11 @@ public class BedDetailsServiceImpl extends ServiceImpl<BedDetailsMapper, BedDeta
     @Override
     public Page<BedDetailsVo> listBedDetailsVoPage(String customerName, String startDate, String endDate, Integer isDeleted, Integer pageSize) {
         Page<BedDetails> page = new Page<>(pageSize, 10);
-        LambdaQueryWrapper<BedDetails> wrapper = new LambdaQueryWrapper<>();
-        if (isDeleted != null) {
-            wrapper.eq(BedDetails::getIsDeleted, isDeleted);
+        if(startDate == null || endDate == null) {
+            startDate = "2000-01-01";
+            endDate = "2100-12-31";
         }
-        Page<BedDetails> detailsPage = page(page, wrapper);
+        Page<BedDetails> detailsPage = baseMapper.selectPageIgnoreLogicDelete(page, isDeleted, LocalDate.parse(startDate), LocalDate.parse(endDate));
 
         Page<BedDetailsVo> voPage = new Page<>(detailsPage.getCurrent(), detailsPage.getSize(), detailsPage.getTotal());
         List<BedDetailsVo> voList = detailsPage.getRecords().stream().map(detail -> {

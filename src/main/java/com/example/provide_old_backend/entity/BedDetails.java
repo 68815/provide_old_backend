@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
+import com.baomidou.mybatisplus.annotation.TableLogic;
 
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -31,6 +32,7 @@ public class BedDetails implements Serializable {
     @TableField("bed_id")
     private Integer bedId;
 
+    @TableLogic
     @TableField("is_deleted")
     private Integer isDeleted;
 }
