@@ -40,6 +40,7 @@ public class BackdownServiceImpl extends ServiceImpl<BackdownMapper, Backdown> i
         Backdown backdown = getById(id);
         if (backdown != null) {
             backdown.setIsDeleted(isDeleted);
+            backdown.setAuditstatus(0);
             updateById(backdown);
         }
     }

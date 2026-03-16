@@ -3,6 +3,8 @@ package com.example.provide_old_backend.controller;
 import com.example.provide_old_backend.common.ResultVo;
 import com.example.provide_old_backend.entity.Backdown;
 import com.example.provide_old_backend.service.BackdownService;
+import com.example.provide_old_backend.vo.BackdownDelRequest;
+import com.example.provide_old_backend.vo.BackdownExamineRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,14 +30,14 @@ public class BackdownController {
     }
 
     @PostMapping("/examineBackdown")
-    public ResultVo<Void> examineBackdown(@RequestParam Integer id, @RequestParam Integer auditstatus) {
-        backdownService.examineBackdown(id, auditstatus);
+    public ResultVo<Void> examineBackdown(@RequestBody BackdownExamineRequest request) {
+        backdownService.examineBackdown(request.getId(), request.getAuditstatus());
         return ResultVo.success();
     }
 
     @PostMapping("/delBackdown")
-    public ResultVo<Void> delBackdown(@RequestParam Integer id, @RequestParam Integer is_deleted) {
-        backdownService.deleteBackdown(id, is_deleted);
+    public ResultVo<Void> delBackdown(@RequestBody BackdownDelRequest request) {
+        backdownService.deleteBackdown(request.getId(), request.getIs_deleted());
         return ResultVo.success();
     }
 }

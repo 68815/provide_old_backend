@@ -32,13 +32,13 @@ public class OutwardController {
 
     @PostMapping("/examineOutward")
     public ResultVo<Void> examineOutward(@RequestBody OutwardExamineRequest request) {
-        outwardService.examineOutward(request.getId(), request.getAuditStatus());
+        outwardService.examineOutward(request.getId(), request.getAuditstatus());
         return ResultVo.success();
     }
 
     @PostMapping("/delOutward")
     public ResultVo<Void> delOutward(@RequestBody OutwardDelRequest request) {
-        outwardService.deleteOutward(request.getId(), request.getIsDeleted());
+        outwardService.deleteOutward(request.getId(), request.getIs_deleted());
         return ResultVo.success();
     }
 }
