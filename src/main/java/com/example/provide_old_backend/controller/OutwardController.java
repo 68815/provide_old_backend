@@ -6,6 +6,9 @@ import com.example.provide_old_backend.service.OutwardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import com.example.provide_old_backend.vo.OutwardDelRequest;
+import com.example.provide_old_backend.vo.OutwardExamineRequest;
+
 import java.util.List;
 
 @RestController
@@ -28,14 +31,14 @@ public class OutwardController {
     }
 
     @PostMapping("/examineOutward")
-    public ResultVo<Void> examineOutward(@RequestParam Integer id, @RequestParam Integer auditstatus) {
-        outwardService.examineOutward(id, auditstatus);
+    public ResultVo<Void> examineOutward(@RequestBody OutwardExamineRequest request) {
+        outwardService.examineOutward(request.getId(), request.getAuditStatus());
         return ResultVo.success();
     }
 
     @PostMapping("/delOutward")
-    public ResultVo<Void> delOutward(@RequestParam Integer id, @RequestParam Integer is_deleted) {
-        outwardService.deleteOutward(id, is_deleted);
+    public ResultVo<Void> delOutward(@RequestBody OutwardDelRequest request) {
+        outwardService.deleteOutward(request.getId(), request.getIsDeleted());
         return ResultVo.success();
     }
 }

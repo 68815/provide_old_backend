@@ -40,6 +40,7 @@ public class OutwardServiceImpl extends ServiceImpl<OutwardMapper, Outward> impl
         Outward outward = getById(id);
         if (outward != null) {
             outward.setIsDeleted(isDeleted);
+            outward.setAuditstatus(0);
             updateById(outward);
         }
     }
