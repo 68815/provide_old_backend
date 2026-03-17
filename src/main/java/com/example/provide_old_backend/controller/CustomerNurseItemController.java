@@ -8,6 +8,7 @@ import com.example.provide_old_backend.vo.CustomerNurseItemVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -25,12 +26,16 @@ public class CustomerNurseItemController {
 
     @PostMapping("/addItemToCustomer")
     public ResultVo<Void> addItemToCustomer(@RequestBody List<CustomerNurseItem> customernurseitems) {
+        customernurseitems.forEach(item -> item.setIsDeleted(0));
+        customernurseitems.forEach(item -> item.setBuyTime(LocalDate.now()));
         customerNurseItemService.saveBatch(customernurseitems);
         return ResultVo.success();
     }
 
     @PostMapping("/enewNurseItem")
     public ResultVo<Void> enewNurseItem(@RequestBody CustomerNurseItem customerNurseItem) {
+        customerNurseItem.setIsDeleted(0);
+        customerNurseItem.setBuyTime(LocalDate.now());
         customerNurseItemService.updateById(customerNurseItem);
         return ResultVo.success();
     }

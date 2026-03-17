@@ -13,6 +13,7 @@ import com.example.provide_old_backend.service.NurseContentService;
 import com.example.provide_old_backend.vo.CustomerNurseItemVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -64,11 +65,10 @@ public class CustomerNurseItemServiceImpl extends ServiceImpl<CustomerNurseItemM
 
     @Override
     public void removeCustomerItem(Integer id) {
-        CustomerNurseItem item = getById(id);
-        if (item != null) {
-            item.setIsDeleted(1);
-            updateById(item);
-        }
+        LambdaUpdateWrapper<CustomerNurseItem> updateWrapper = new LambdaUpdateWrapper<>();
+        updateWrapper.eq(CustomerNurseItem::getId, id)
+               .set(CustomerNurseItem::getIsDeleted, 1);
+        update(updateWrapper);
     }
 
     @Override
