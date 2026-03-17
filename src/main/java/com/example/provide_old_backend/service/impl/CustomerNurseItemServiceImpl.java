@@ -73,6 +73,12 @@ public class CustomerNurseItemServiceImpl extends ServiceImpl<CustomerNurseItemM
 
     @Override
     public void removeCustomerLevelAndItem(Integer customerId, Integer levelId) {
+        Customer customer = customerService.getById(customerId);
+        if (customer != null) {
+            customer.setLevelId(null);
+            customerService.updateById(customer);
+        }
+
         LambdaQueryWrapper<CustomerNurseItem> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(CustomerNurseItem::getCustormerId, customerId)
                .eq(CustomerNurseItem::getLevelId, levelId);
