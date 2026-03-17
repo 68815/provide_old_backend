@@ -42,9 +42,9 @@ public class CustomerServiceImpl extends ServiceImpl<CustomerMapper, Customer> i
             if (manType == 3) {
                 wrapper.eq(Customer::getUserId, -1);
             }
-        }
-        if (userId != null) {
-            wrapper.eq(Customer::getUserId, userId);
+            else if (userId != null) {
+                wrapper.eq(Customer::getUserId, userId);
+            }
         }
         Page<Customer> customerPage = page(page, wrapper);
 
