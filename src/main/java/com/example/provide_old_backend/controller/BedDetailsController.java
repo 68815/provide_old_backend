@@ -5,8 +5,10 @@ import com.example.provide_old_backend.common.ResultVo;
 import com.example.provide_old_backend.entity.BedDetails;
 import com.example.provide_old_backend.service.BedDetailsService;
 import com.example.provide_old_backend.vo.BedDetailsVo;
+import com.example.provide_old_backend.vo.ExchangeBedRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import com.example.provide_old_backend.common.BusinessException;
 
 @RestController
 @RequestMapping("/yyzx/beddetails")
@@ -25,14 +27,11 @@ public class BedDetailsController {
     }
 
     @PostMapping("/exchangeBed")
-    public ResultVo<Void> exchangeBed(@RequestParam Integer id,
-                                       @RequestParam Integer customerId,
-                                       @RequestParam Integer oldBedId,
-                                       @RequestParam Integer newBedId,
-                                       @RequestParam String newRoomNo,
-                                       @RequestParam String buildingNo,
-                                       @RequestParam String endDate) {
-        bedDetailsService.exchangeBed(id, customerId, oldBedId, newBedId, newRoomNo, buildingNo, endDate);
+    public ResultVo<Void> exchangeBed(@RequestBody ExchangeBedRequest request) {
+        if (request.getId() == null || request.getCustomerId() == null || request.getOldBedId() == null || request.getNewBedId() == null || request.getNewRoomNo() == null || request.getBuildingNo() == null || request.getEndDate() == null) {
+            throw new BusinessException("参数不能为空");
+        }
+        bedDetailsService.exchangeBed(request.getId(), request.getCustomerId(), request.getOldBedId(), request.getNewBedId(), request.getNewRoomNo(), request.getBuildingNo(), request.getEndDate());
         return ResultVo.success();
     }
 

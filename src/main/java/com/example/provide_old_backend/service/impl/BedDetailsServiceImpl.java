@@ -1,5 +1,7 @@
 package com.example.provide_old_backend.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.provide_old_backend.entity.Bed;
@@ -13,6 +15,7 @@ import com.example.provide_old_backend.vo.BedDetailsVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.time.LocalDate;
+import com.example.provide_old_backend.common.BusinessException;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -61,27 +64,42 @@ public class BedDetailsServiceImpl extends ServiceImpl<BedDetailsMapper, BedDeta
 
     @Override
     public void exchangeBed(Integer id, Integer customerId, Integer oldBedId, Integer newBedId, String newRoomNo, String buildingNo, String endDate) {
-        BedDetails bedDetails = getById(id);
-        if (bedDetails != null) {
-            Bed oldBed = bedService.getById(oldBedId);
-            if (oldBed != null) {
-                oldBed.setBedStatus(1);
-                bedService.updateById(oldBed);
-            }
-            Bed newBed = bedService.getById(newBedId);
-            if (newBed != null) {
-                newBed.setBedStatus(2);
-                bedService.updateById(newBed);
-            }
-            bedDetails.setBedId(newBedId);
-            updateById(bedDetails);
-            Customer customer = customerService.getById(customerId);
-            if (customer != null) {
-                customer.setBedId(newBedId);
-                customer.setRoomNo(newRoomNo);
-                customer.setBuildingNo(buildingNo);
-                customerService.updateById(customer);
-            }
+        Bed oldBed = bedService.getById(oldBedId);
+        Bed newBed = bedService.getById(newBedId);
+        if (oldBed.getBedStatus() == 1 || newBed.getBedStatus() >= 2) {
+            throw new BusinessException("床位状态错误");
+        }
+
+        BedDetails oldBedDetails = getById(id);
+        if (oldBedDetails == null) {
+            throw new BusinessException("旧床位明细不存在");
+        }
+
+        LambdaUpdateWrapper<BedDetails> oldWrapper = new LambdaUpdateWrapper<>();
+        oldWrapper.eq(BedDetails::getId, id)
+                  .eq(BedDetails::getCustomerId, customerId)
+                  .set(BedDetails::getIsDeleted, 1);
+        update(oldWrapper);
+
+        BedDetails details = new BedDetails();
+        details.setBedId(newBedId);
+        details.setCustomerId(customerId);
+        details.setStartDate(LocalDate.now());
+        details.setEndDate(LocalDate.parse(endDate));
+        details.setIsDeleted(0);
+        save(details);
+
+        oldBed.setBedStatus(1);
+        newBed.setBedStatus(2);
+        bedService.updateById(newBed);
+        bedService.updateById(oldBed);
+
+        Customer customer = customerService.getById(customerId);
+        if (customer != null) {
+            customer.setBedId(newBedId);
+            customer.setRoomNo(newRoomNo);
+            customer.setBuildingNo(buildingNo);
+            customerService.updateById(customer);
         }
     }
 }
